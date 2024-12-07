@@ -1,10 +1,7 @@
 import time
-operators = ('+', '*')
-memo = dict()
 
 def is_even(num):
     return num % 2 == 0
-
 
 def get_combos(nums, result):
     possibilities = list(nums[:1])
@@ -13,12 +10,9 @@ def get_combos(nums, result):
         for possibility in possibilities:
             if possibility > result:
                 continue
-            r1 = possibility * num
-            r2 = possibility + num
-            r3 = int(str(possibility) + str(num))
-            updated.append(r1)
-            updated.append(r2)
-            updated.append(r3)
+            updated.append(possibility * num)
+            updated.append(possibility + num)
+            updated.append(int(str(possibility) + str(num)))
 
         possibilities = updated
     return possibilities
@@ -42,6 +36,6 @@ with open("day7.txt", 'r') as f:
     print(f"Day 7-2: {total}")
     end = time.time()
     print(f"Time taken: {end - start}")
-    # 1.6867587566375732 :(
+    # 1.6867587566375732 seconds :(
 
 
