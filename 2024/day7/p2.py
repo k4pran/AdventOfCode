@@ -1,21 +1,22 @@
 import time
+from collections import deque
+
 
 def is_even(num):
     return num % 2 == 0
 
 def get_combos(nums, result):
-    possibilities = list(nums[:1])
+    possibilities = deque(nums[:1])
     for num in nums[1:]:
-        updated = []
-        for possibility in possibilities:
+        for _ in range(len(possibilities)):
+            possibility = possibilities.popleft()
             if possibility > result:
                 continue
-            updated.append(possibility * num)
-            updated.append(possibility + num)
-            updated.append(int(str(possibility) + str(num)))
+            possibilities.append(possibility * num)
+            possibilities.append(possibility + num)
+            possibilities.append(int(str(possibility) + str(num)))
 
-        possibilities = updated
-    return possibilities
+    return list(possibilities)
 
 
 with open("day7.txt", 'r') as f:
