@@ -1,3 +1,23 @@
+def as_grid(lines):
+    return [[col for col in row] for row in lines]
+
+
+def is_in_grid(grid, loc):
+    if loc[0] < 0 or loc[0] >= len(grid):
+        return False
+    if loc[1] < 0 or loc[1] >= len(grid[0]):
+        return False
+    return True
+
+
+def print_grid(grid, replace=None):
+    for i, row in enumerate(grid):
+        for j, col in enumerate(row):
+            if replace is not None and (i, j) in replace:
+                print(replace[(i, j)], end="")
+            else:
+                print(col, end="")
+        print()
 
 
 def add_2d_padding(grid, padding_char, layers=1):
