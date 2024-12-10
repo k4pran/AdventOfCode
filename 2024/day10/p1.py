@@ -31,12 +31,11 @@ def dfs(grid, start, needle) -> bool:
     found_already = set()
     while stack:
         node = stack.pop()
-        print(node)
 
         for adj in get_valid_adjacent(grid, node):
-            if grid[adj[0]][adj[1]] == needle and f"{grid}, {adj}" not in found_already:
+            if grid[adj[0]][adj[1]] == needle and adj not in found_already:
                 destination_count += 1
-                found_already.add(f"{grid}, {adj}")
+                found_already.add(adj)
             if adj not in stack:
                 stack.append(adj)
 

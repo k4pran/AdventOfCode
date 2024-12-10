@@ -30,7 +30,6 @@ def dfs(grid, start, needle) -> bool:
     destination_count = 0
     while stack:
         node = stack.pop()
-        print(node)
 
         for adj in get_valid_adjacent(grid, node):
             if grid[adj[0]][adj[1]] == needle:
