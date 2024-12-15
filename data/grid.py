@@ -1,6 +1,22 @@
 def as_grid(lines):
     return [[col for col in row] for row in lines]
 
+
+def search_grid(grid, target):
+    for i, row in enumerate(grid):
+        for j, col in enumerate(row):
+            if col == target:
+                return (i, j)
+    return None
+
+def search_all_grid(grid, target):
+    found = []
+    for i, row in enumerate(grid):
+        for j, col in enumerate(row):
+            if col == target:
+                found.append((i, j))
+    return found
+
 def print_grid_from_coords(coords, width, height):
     grid = [['.' for _ in range(width)] for _ in range(height)]
 
