@@ -127,7 +127,6 @@ with open("day15.txt", 'r') as f:
         pos = move(grid, pos, action)
         # print(f"Move {i}")
         # print_grid(grid)
-        print("i")
         i += 1
 
     boxes = search_all_grid(grid, '[')
@@ -135,4 +134,4 @@ with open("day15.txt", 'r') as f:
     for box in boxes:
         total += 100 * box[0] + box[1]
 
-    print(f"\nDay 15-1: {total}")
+    print(f"\nDay 15-2: {total}")
