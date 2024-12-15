@@ -1,13 +1,34 @@
 def as_grid(lines):
     return [[col for col in row] for row in lines]
 
+def print_grid_from_coords(coords, width, height):
+    grid = [['.' for _ in range(width)] for _ in range(height)]
 
-def is_in_grid(grid, loc):
-    if loc[0] < 0 or loc[0] >= len(grid):
-        return False
-    if loc[1] < 0 or loc[1] >= len(grid[0]):
-        return False
-    return True
+    for x, y in coords:
+        if 0 <= x < width and 0 <= y < height:
+            grid[y][x] = '#'
+
+    for row in grid:
+        print(''.join(row))
+
+
+def get_adjacent(grid, loc):
+    row, col = loc
+    adj = []
+
+    if row > 0 and col < len(grid[row - 1]):
+        adj.append((row - 1, col))
+
+    if row + 1 < len(grid) and col < len(grid[row + 1]):
+        adj.append((row + 1, col))
+
+    if col > 0:
+        adj.append((row, col - 1))
+
+    if col + 1 < len(grid[row]):
+        adj.append((row, col + 1))
+
+    return adj
 
 
 def print_grid(grid, replace=None):
