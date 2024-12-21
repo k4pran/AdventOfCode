@@ -1,4 +1,3 @@
-import copy
 from collections import deque, defaultdict
 
 from data.grid import as_grid, get_adjacent, print_grid
@@ -9,10 +8,59 @@ def count_horizontal_sides(region_rows):
     sorted_rows = sorted(region_rows.keys())  # Ensure rows are in order
 
     for row in sorted_rows:
-        if len(region_rows[row]) == 1:
-            pass
-            # check up and down - if up != SAME PLANT TYPE then add side, if bottom not same plant type add side
-            # only do count up and down once for a continuous side
+        # check up
+        row_above = region_rows.get(row - 1, None)
+        row_below = region_rows.get(row + 1, None)
+
+        previous_col = None
+        side_started = False
+        for col in sorted(region_rows[row]):
+            # top edge
+            if not row_above and not side_started:
+                side_started = True
+
+            if row_above and col in row_above:
+                if side_started:
+                    sides += 1
+                    side_started = False
+
+            if row_above and col not in row_above:
+                if not side_started:
+                    side_started = True
+
+            if previous_col and previous_col + 1 != col:
+                if side_started:
+                    sides += 1
+                    side_started = False
+
+            previous_col = col
+        if side_started:
+            sides += 1
+
+        previous_col = None
+        side_started = False
+        for col in sorted(region_rows[row]):
+            # bottom edge
+            if not row_below and not side_started:
+                side_started = True
+
+            if row_below and col in row_below:
+                if side_started:
+                    sides += 1
+                    side_started = False
+
+            if row_below and col not in row_below:
+                if not side_started:
+                    side_started = True
+
+            if previous_col and previous_col + 1 != col:
+                if side_started:
+                    sides += 1
+                    side_started = False
+
+            previous_col = col
+        if side_started:
+            sides += 1
 
     return sides
 
@@ -22,8 +70,6 @@ def find_region(grid, start):
     q = deque([start])
     region = [start]
 
-    sides = 0
-    counted_sides = set()
     rows = defaultdict(list)
     while q:
         loc = q.popleft()
@@ -33,13 +79,14 @@ def find_region(grid, start):
                 q.append(adj)
                 region.append(adj)
 
-
             if grid[adj[0]][adj[1]] == plot_type:
                 if adj[1] not in rows[loc[0]]:
                     rows[loc[0]].append(adj[1])
 
-
-    return region, (count_horizontal_sides(rows) * 2) * len(region)
+    if len(rows) == 0 and len(region) == 1:
+        return region, 4 * len(region), 4
+    sides = count_horizontal_sides(rows) * 2
+    return region, (sides) * len(region), sides
 
 def find_cost(grid):
 
@@ -50,8 +97,10 @@ def find_cost(grid):
         for j, cell in enumerate(row):
             if (i, j) in visited:
                 continue
-            region, cost = find_region(grid, (i, j))
+            region, cost, sides = find_region(grid, (i, j))
             total_cost += cost
+            print(f"region {cell} -- sides {sides} -- cost {cost}")
+
             region_coords.append(region)
             visited.update(region)
 
