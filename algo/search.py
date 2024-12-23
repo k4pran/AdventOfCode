@@ -60,6 +60,27 @@ def dfs(haystack: Dict[Any, List[Any]], start, needle) -> bool:
     return False
 
 
+def dfs_track_paths(grid, start, end, adj_func: Callable[[Any, Iterable[Any]], Iterable[Any]]):
+    stack = [(start, [start])]
+    visited = set()
+
+    while stack:
+        node, path = stack.pop()
+
+        if node == end:
+            return True, path
+
+        if node in visited:
+            continue
+        visited.add(node)
+
+        for adj in adj_func(grid, node):
+            if adj not in visited:
+                stack.append((adj, path + [adj]))
+
+    return False, []
+
+
 def dfs_recursive(haystack: Dict[Any, List[Any]], start, needle, visited: Set[Any] = None) -> bool:
     if visited is None:
         visited = set()
@@ -73,5 +94,21 @@ def dfs_recursive(haystack: Dict[Any, List[Any]], start, needle, visited: Set[An
         if adj not in visited:
             if dfs_recursive(haystack, adj, needle, visited):
                 return True
-
     return False
+
+
+def find_clique(graph, start):
+    stack = deque([start])
+    visited = set()
+    visited.add(start)
+
+    while stack:
+        node = stack.pop()
+
+        for adj in graph.get(node, []):
+            if adj not in visited:
+                if all(adj in graph[n] for n in visited):
+                    stack.append(adj)
+                    visited.add(adj)
+
+    return visited
