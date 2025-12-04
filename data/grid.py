@@ -46,6 +46,31 @@ def get_adjacent(grid, loc):
 
     return adj
 
+def get_diagonals(grid, loc):
+    row, col = loc
+    diag = []
+    rows = len(grid)
+
+    # Up-left
+    if row > 0 and col > 0:
+        diag.append((row - 1, col - 1))
+
+    # Up-right
+    if row > 0 and col + 1 < len(grid[row - 1]):
+        diag.append((row - 1, col + 1))
+
+    # Down-left
+    if row + 1 < rows and col > 0:
+        diag.append((row + 1, col - 1))
+
+    # Down-right
+    if row + 1 < rows and col + 1 < len(grid[row + 1]):
+        diag.append((row + 1, col + 1))
+
+    return diag
+
+def get_adj_and_diagonal(grid, loc):
+    return get_adjacent(grid, loc) + get_diagonals(grid, loc)
 
 def print_grid(grid, replace=None):
     for i, row in enumerate(grid):
@@ -56,6 +81,11 @@ def print_grid(grid, replace=None):
                 print(col, end="")
         print()
 
+def replace_cells(grid, positions, replace_char):
+    for i, row in enumerate(grid):
+        for j, col in enumerate(row):
+            if positions is not None and (i, j) in positions:
+                grid[i][j] = replace_char
 
 def add_2d_padding(grid, padding_char, layers=1):
     rows = len(grid)
