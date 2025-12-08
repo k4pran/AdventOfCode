@@ -28,44 +28,85 @@ def print_grid_from_coords(coords, width, height):
         print(''.join(row))
 
 
-def get_adjacent(grid, loc):
+def get_up(grid, loc):
     row, col = loc
+    if row > 0 and col < len(grid[row - 1]):
+        return (row - 1, col)
+    return None
+
+
+def get_down(grid, loc):
+    row, col = loc
+    if row + 1 < len(grid) and col < len(grid[row + 1]):
+        return (row + 1, col)
+    return None
+
+
+def get_left(grid, loc):
+    row, col = loc
+    if col > 0:
+        return (row, col - 1)
+    return None
+
+
+def get_right(grid, loc):
+    row, col = loc
+    if col + 1 < len(grid[row]):
+        return (row, col + 1)
+    return None
+
+def get_adjacent(grid, loc):
     adj = []
 
-    if row > 0 and col < len(grid[row - 1]):
-        adj.append((row - 1, col))
-
-    if row + 1 < len(grid) and col < len(grid[row + 1]):
-        adj.append((row + 1, col))
-
-    if col > 0:
-        adj.append((row, col - 1))
-
-    if col + 1 < len(grid[row]):
-        adj.append((row, col + 1))
+    for neighbor in (
+        get_up(grid, loc),
+        get_down(grid, loc),
+        get_left(grid, loc),
+        get_right(grid, loc),
+    ):
+        if neighbor is not None:
+            adj.append(neighbor)
 
     return adj
 
-def get_diagonals(grid, loc):
+def get_up_left(grid, loc):
     row, col = loc
-    diag = []
-    rows = len(grid)
-
-    # Up-left
     if row > 0 and col > 0:
-        diag.append((row - 1, col - 1))
+        return (row - 1, col - 1)
+    return None
 
-    # Up-right
+
+def get_up_right(grid, loc):
+    row, col = loc
     if row > 0 and col + 1 < len(grid[row - 1]):
-        diag.append((row - 1, col + 1))
+        return (row - 1, col + 1)
+    return None
 
-    # Down-left
-    if row + 1 < rows and col > 0:
-        diag.append((row + 1, col - 1))
 
-    # Down-right
-    if row + 1 < rows and col + 1 < len(grid[row + 1]):
-        diag.append((row + 1, col + 1))
+def get_down_left(grid, loc):
+    row, col = loc
+    if row + 1 < len(grid) and col > 0:
+        return (row + 1, col - 1)
+    return None
+
+
+def get_down_right(grid, loc):
+    row, col = loc
+    if row + 1 < len(grid) and col + 1 < len(grid[row + 1]):
+        return (row + 1, col + 1)
+    return None
+
+def get_diagonals(grid, loc):
+    diag = []
+
+    for neighbor in (
+        get_up_left(grid, loc),
+        get_up_right(grid, loc),
+        get_down_left(grid, loc),
+        get_down_right(grid, loc),
+    ):
+        if neighbor is not None:
+            diag.append(neighbor)
 
     return diag
 
